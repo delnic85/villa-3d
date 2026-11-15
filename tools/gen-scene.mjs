@@ -5,8 +5,13 @@
 import fs from 'fs';
 
 const REV = process.argv[2] || new Date().toISOString().slice(0, 16).replace('T', ' ');
-const LOT = { w: 35.9, d: 19.8 };      // lotto 710 mq (stima da mappa catastale: 35,9 x 19,8)
-const HX = 10.4, HZ = 4.0;             // posizione della casa nel lotto
+// Lotto 710 mq: lati ricavati dalla mappa catastale (rettangolo equivalente 31,4 x 22,6 m, lato lungo sulla strada).
+// La casa resta ferma nelle coordinate mondo (HX, HZ): a spostarsi e' l'origine del lotto (x0, z0),
+// cosi' le modifiche gia' salvate dall'utente nel visore restano al loro posto.
+const HX = 10.4, HZ = 4.0;             // spigolo della casa nelle coordinate mondo
+const LOT = { w: 31.4, d: 22.6, x0: 3.0, z0: -1.0 };   // casa a 7,4 m dal confine sinistro e 5,0 m dal confine sul retro
+const LL = LOT.x0, LR = LOT.x0 + LOT.w, LB = LOT.z0, LF = LOT.z0 + LOT.d;   // sinistra, destra, retro, fronte strada
+const PK = LR - 6.6;                   // bordo sinistro dell'area parcheggio
 const Y0 = 0.15, Y1 = 3.45, ROOF = 6.75, H = 3.0;
 const r3 = v => +v.toFixed(3);
 const X = x => r3(x + HX), Z = z => r3(z + HZ);
@@ -52,7 +57,9 @@ const OW = (t, x, z, r = 0, o = {}) => O(t, x, z, r, o, null);
 // ================= PIANO TERRA: muri esterni (spessore 50 cm) =================
 const win = (a, b, s, e, o = {}) => ({ t: 'win', a, b, s, e, ...o });
 const gls = (a, b, e = 2.4, o = {}) => ({ t: 'glass', a, b, s: 0, e, ...o });
-const door = (a, b, o = {}) => ({ t: 'door', a, b, s: 0, e: 2.1, ...o });
+// porte interne: solo il vano, senza telaio ne' anta (richiesta dell'utente: nel tour danno fastidio).
+// Restano il portoncino d'ingresso (k: 'ing') e le porte di servizio verso l'esterno (k: 'serv').
+const door = (a, b, o = {}) => o.k ? ({ t: 'door', a, b, s: 0, e: 2.1, ...o }) : ({ t: 'open', a, b, s: 0, e: o.e || 2.1 });
 const open = (a, b, e = 2.1) => ({ t: 'open', a, b, s: 0, e });
 
 W('e_rear_k', 'pt', 1.0, 0, 6.55, 0.49, { ext: 1, op: [win(2.95, 4.45, 1.05, 2.4)] });
@@ -264,27 +271,28 @@ P('letto_sing', 11.32, 8.08, 90, { w: 1.2 }); P('comodino', 10.52, 8.95, 90); P(
 // ================= LOTTO, RECINZIONE, GIARDINO (coordinate mondo) =================
 const zona = (id, x1, z1, x2, z2, m, layer, o = {}) =>
   objects.push({ id, t: 'zona', p: [r3((x1 + x2) / 2), 0, r3((z1 + z2) / 2)], r: 0, w: r3(x2 - x1), d: r3(z2 - z1), m, layer, ...o });
-zona('z_lotto', 0, 0, LOT.w, LOT.d, 'prato', 0, { lock: 1, n: 'Prato del lotto' });
-zona('z_marciapiede', -12, LOT.d, LOT.w + 12, LOT.d + 1.5, 'cemento_chiaro', 1, { lock: 1, n: 'Marciapiede' });
-zona('z_strada', -12, LOT.d + 1.5, LOT.w + 12, LOT.d + 8, 'asfalto', 1, { lock: 1, n: 'Strada' });
+zona('z_lotto', LL, LB, LR, LF, 'prato', 0, { lock: 1, n: 'Prato del lotto' });
+zona('z_marciapiede', LL - 12, LF, LR + 12, LF + 1.5, 'cemento_chiaro', 1, { lock: 1, n: 'Marciapiede' });
+zona('z_strada', LL - 12, LF + 1.5, LR + 12, LF + 8, 'asfalto', 1, { lock: 1, n: 'Strada' });
 zona('z_terrazzo', X(-0.5), Z(10.3), X(16.0), Z(13.2), 'gres_est_grigio', 3, { n: 'Terrazzo frontale' });
-zona('z_vialetto', X(7.1), Z(13.2), X(8.9), LOT.d, 'gres_est_grigio', 3, { n: 'Vialetto d\'ingresso' });
+zona('z_vialetto', X(7.1), Z(13.2), X(8.9), LF, 'gres_est_grigio', 3, { n: 'Vialetto d\'ingresso' });
 zona('z_pergola', X(-4.9), Z(-0.3), X(1.0), Z(7.0), 'gres_est_scuro', 4, { n: 'Pavimento pergola' });
-zona('z_retro', X(-0.5), 0.4, 29.3, Z(1.0), 'gres_est_scuro', 3, { n: 'Pavimentazione retro' });
+zona('z_retro', X(-0.5), LB + 0.4, PK, Z(1.0), 'gres_est_scuro', 3, { n: 'Pavimentazione retro' });
 zona('z_lato_dx', X(14.69), Z(0.9), X(16.0), Z(10.3), 'gres_est_scuro', 2, { n: 'Camminamento laterale' });
 zona('z_lato_sx', X(-0.9), Z(7.0), X(0), Z(10.3), 'gres_est_scuro', 2, { n: 'Camminamento laterale' });
-zona('z_parcheggio', 29.3, 0.4, LOT.w - 0.3, LOT.d, 'cemento_lastre', 3, { n: 'Area parcheggio' });
-zona('z_ghiaia', 5.6, 0.6, 9.4, 3.5, 'ghiaia', 2, { n: 'Ghiaia solarium' });
+zona('z_parcheggio', PK, LB + 0.4, LR - 0.3, LF, 'cemento_lastre', 3, { n: 'Area parcheggio' });
+zona('z_ghiaia', 5.6, LB + 0.6, 9.4, 3.5, 'ghiaia', 2, { n: 'Ghiaia solarium' });
 
 // recinzione: muro a pannelli su strada e lato sinistro, muretto con ringhiera su retro e lato destro
 const gateX = X(8.0);
-OW('muro_cinta', (gateX - 1.3) / 2, LOT.d - 0.15, 0, { w: r3(gateX - 1.3) });
-OW('cancello_ped', gateX, LOT.d - 0.15, 0);
-OW('muro_cinta', (gateX + 1.3 + 29.6) / 2, LOT.d - 0.15, 0, { w: r3(29.6 - gateX - 1.3) });
-OW('cancello_car', 32.5, LOT.d - 0.15, 0, { w: 5.8 });
-OW('muro_cinta', 0.15, LOT.d / 2, 90, { w: LOT.d });
-OW('recinzione', LOT.w / 2, 0.12, 0, { w: LOT.w });
-OW('recinzione', LOT.w - 0.12, LOT.d / 2, 90, { w: LOT.d });
+const GAPX = r3((X(16.0) + PK) / 2);   // asse della striscia tra camminamento laterale e parcheggio
+OW('muro_cinta', (LL + gateX - 1.3) / 2, LF - 0.15, 0, { w: r3(gateX - 1.3 - LL) });
+OW('cancello_ped', gateX, LF - 0.15, 0);
+OW('muro_cinta', (gateX + 1.3 + PK + 0.3) / 2, LF - 0.15, 0, { w: r3(PK + 0.3 - gateX - 1.3) });
+OW('cancello_car', PK + 3.2, LF - 0.15, 0, { w: 5.8 });
+OW('muro_cinta', LL + 0.15, (LB + LF) / 2, 90, { w: LOT.d });
+OW('recinzione', (LL + LR) / 2, LB + 0.12, 0, { w: LOT.w });
+OW('recinzione', LR - 0.12, (LB + LF) / 2, 90, { w: LOT.d });
 
 // pergola con salotto e tavolo, lettini
 OW('pergola', X(-2.45), Z(3.35), 0, { w: 4.2, d: 6.4 });
@@ -294,19 +302,19 @@ OW('lettino', 6.6, 2.1, 0); OW('lettino', 7.7, 2.1, 0);
 // verde e arredo del giardino frontale
 OW('fioriera', X(5.2), Z(13.75), 0, { w: 2.4, cactus: 1 });
 OW('panca', X(5.6), Z(14.75), 0);
-OW('fioriera', X(17.3), Z(13.6), 0, { w: 2.0 });
+OW('fioriera', GAPX, Z(13.6), 90, { w: 2.0 });
 OW('fioriera', X(-0.2), Z(14.0), 90, { w: 1.8 });
-OW('cespuglio', 3.2, 17.6); OW('cespuglio', 1.6, 12.4);
+OW('cespuglio', LL + 1.4, LF - 2.2); OW('cespuglio', LL + 0.9, 13.0);
 OW('pietre_passo', 7.8, Z(10.6), 90, { w: 5.2 });
-OW('pietre_passo', 27.7, Z(6.1), 0, { w: 3.0 });
-[[12.6, 18.6], [15.0, 18.6], [21.6, 18.6], [24.4, 18.6], [27.4, 18.4], [27.4, 15.2], [27.4, 12.2], [27.4, 8.4], [28.6, 9.4], [28.6, 10.9],
- [6.6, 16.8], [8.9, 16.8], [4.4, 11.8], [4.4, 14.2], [2.2, 5.0]].forEach(p => OW('lampioncino', p[0], p[1]));
-OW('auto', 32.4, 8.2, 180, { m: 'carrozzeria_grigia' });
-OW('auto', 32.6, 14.2, 180);
+OW('pietre_passo', GAPX, Z(6.1), 0, { w: r3(PK - X(16.0)) });
+[[12.6, LF - 1.2], [15.0, LF - 1.2], [21.6, LF - 1.2], [24.4, LF - 1.2], [GAPX, LF - 1.4], [GAPX, 15.2], [GAPX, 12.2], [GAPX, 8.4], [GAPX, 9.4], [GAPX, 10.9],
+ [6.6, 16.8], [8.9, 16.8], [4.4, 11.8], [4.4, 14.2], [LL + 1.2, 5.0]].forEach(p => OW('lampioncino', p[0], p[1]));
+OW('auto', PK + 3.1, 8.2, 180, { m: 'carrozzeria_grigia' });
+OW('auto', PK + 3.3, 14.2, 180);
 
 // ================= PUNTI DI VISTA =================
 const views = [
-  { n: 'Cancello d\'ingresso', p: [gateX, 0, LOT.d + 3.6], yaw: 0 },
+  { n: 'Cancello d\'ingresso', p: [gateX, 0, LF + 3.6], yaw: 0 },
   { n: 'Davanti alla porta', p: [X(8.0), 0.03, Z(12.4)], yaw: 0 },
   { n: 'Ingresso (doppia altezza)', p: [X(8.0), Y0, Z(9.2)], yaw: 0 },
   { n: 'Soggiorno', p: [X(6.4), Y0, Z(7.2)], yaw: 80 },
@@ -316,8 +324,8 @@ const views = [
   { n: 'Camera matrimoniale', p: [X(3.5), Y1, Z(6.6)], yaw: 150 },
   { n: 'Pergola', p: [X(-2.4), 0.05, Z(3.3)], yaw: 180 },
   { n: 'Giardino sul retro', p: [X(-3.2), 0.03, 1.4], yaw: -140 },
-  { n: 'Parcheggio', p: [32.4, 0.03, 17.6], yaw: 20 },
-  { n: 'Vista dalla strada', p: [X(7.3), 0, LOT.d + 6.5], yaw: 0 }
+  { n: 'Parcheggio', p: [r3(PK + 3.1), 0.03, r3(LF - 2.2)], yaw: 20 },
+  { n: 'Vista dalla strada', p: [X(7.3), 0, LF + 6.5], yaw: 0 }
 ];
 
 const scene = {
