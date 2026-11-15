@@ -33,10 +33,10 @@ function tavolo(B, w, d, m, m2, cm, cm2) {
 }
 function letto(B, w, m, m2) {
   const l = 2.05;
-  B.bx(0, 0.08, 0.02, w, 0.22, l - 0.04, m2); B.bx(0, 0.3, 0.03, w - 0.04, 0.2, l - 0.1, 'tessuto_chiaro');
+  B.bx(0, 0.08, 0.02, w, 0.22, l - 0.04, m2); B.bx(0, 0.3, 0.03, w - 0.04, 0.2, l - 0.1, 'tessuto_beige');
   B.bx(0, 0, -l / 2 + 0.04, w + 0.1, 1.0, 0.08, m);
   const np = w > 1.4 ? 2 : 1;
-  for (let i = 0; i < np; i++) { const x = np === 2 ? (i ? 0.4 : -0.4) * w / 1.7 : 0; B.bx(x, 0.5, -l / 2 + 0.36, Math.min(0.62, w - 0.2), 0.1, 0.38, 'laccato_bianco'); }
+  for (let i = 0; i < np; i++) { const x = np === 2 ? (i ? 0.4 : -0.4) * w / 1.7 : 0; B.bx(x, 0.5, -l / 2 + 0.36, Math.min(0.62, w - 0.2), 0.1, 0.38, 'tessuto_grigio'); }
   B.bx(0, 0.5, 0.33, w - 0.02, 0.035, l * 0.62, m);
 }
 function ante(B, w, h, y0, zf, col = 'metallo_nero', step = 0.55) {
@@ -133,8 +133,8 @@ def('doccia', 'Doccia', 'bagno', { w: [1.2, 0.8, 2.0, 0.1], d: [0.9, 0.7, 1.4, 0
   B.cyl(-w / 2 + 0.15, 2.05, -d / 2 + 0.15, 0.11, 0.015, 'acciaio', 10); B.bx(-w / 2 + 0.15, 1.0, -d / 2 + 0.03, 0.03, 1.07, 0.03, 'acciaio');
 });
 def('vasca', 'Vasca da bagno', 'bagno', {}, B => { B.bx(0, 0, 0, 1.7, 0.56, 0.78, 'ceramica'); B.bx(0, 0.561, 0, 1.52, 0.004, 0.6, 'specchio'); B.cyl(0.7, 0.56, -0.3, 0.015, 0.14, 'acciaio', 6); });
-def('lavatrice', 'Lavatrice / asciugatrice', 'bagno', {}, B => { B.bx(0, 0, 0, 0.6, 0.85, 0.6, 'laccato_bianco'); B.bx(0, 0.25, 0.301, 0.34, 0.34, 0.004, 'schermo'); B.bx(0, 0.72, 0.301, 0.5, 0.08, 0.004, 'laccato_grigio'); });
-def('caldaia', 'Caldaia a parete', 'bagno', {}, B => { B.bx(0, 1.2, 0, 0.5, 0.8, 0.35, 'laccato_bianco'); B.cyl(-0.12, 0.6, 0, 0.02, 0.6, 'acciaio', 6); B.cyl(0.12, 0.6, 0, 0.02, 0.6, 'acciaio', 6); });
+def('lavatrice', 'Lavatrice / asciugatrice', 'bagno', {}, B => { B.bx(0, 0, 0, 0.6, 0.85, 0.6, 'acciaio'); B.bx(0, 0.25, 0.301, 0.34, 0.34, 0.004, 'schermo'); B.bx(0, 0.72, 0.301, 0.5, 0.08, 0.004, 'laccato_antracite'); });
+def('caldaia', 'Caldaia a parete', 'bagno', {}, B => { B.bx(0, 1.2, 0, 0.5, 0.8, 0.35, 'laccato_grigio'); B.cyl(-0.12, 0.6, 0, 0.02, 0.6, 'acciaio', 6); B.cyl(0.12, 0.6, 0, 0.02, 0.6, 'acciaio', 6); });
 def('accumulo', 'Accumulo / pompa di calore', 'bagno', {}, B => { B.cyl(0, 0, 0, 0.3, 1.7, 'laccato_grigio', 14); B.cyl(0, 1.7, 0, 0.3, 0.06, 'metallo_nero', 14); });
 // ---------------- verde e luci ----------------
 def('fioriera', 'Fioriera con piante', 'verde', { m: 'cemento', mg: 'met', n1: 'Vasca', w: [2.0, 0.8, 5, 0.2] }, (B, o, m, m2, w) => {

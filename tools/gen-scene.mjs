@@ -176,7 +176,7 @@ treads.push(T([7.0, 5.43], [7.3, 5.43], [7.3, 6.51], [7.0, 6.51]));
 treads.push(T([7.3, 5.43], [7.61, 5.43], [7.61, 6.51], [7.3, 6.51]));
 const SR = (x1, z1, k1, x2, z2, k2) => [X(x1), Z(z1), k1, X(x2), Z(z2), k2];
 const stairs = {
-  base: Y0, top: Y1, treads, style: 'piena', tread: 'legno_rovere', body: 'pittura_bianca', rail: 'vetro',
+  base: Y0, top: Y1, treads, style: 'piena', tread: 'legno_rovere', body: 'laccato_antracite', rail: 'vetro',
   rails: [
     SR(8.97, 6.33, 0, 8.97, 5.13, 4), SR(8.97, 5.13, 4, 8.97, 4.06, 7),
     SR(7.9, 6.33, 0, 7.9, 5.13, 4), SR(7.9, 5.13, 7, 7.0, 5.13, 10), SR(7.0, 5.13, 13, 7.0, 5.43, 14), SR(7.0, 5.43, 17, 7.61, 5.43, 20),
@@ -230,45 +230,47 @@ const attic = {
 
 // ================= ARREDI INTERNI DA PIANTA =================
 // --- cucina ---
-O('cucina_base', 4.0, 0.79, 0, { w: 5.0, sink: -0.3 });
-O('cucina_colonne', 6.2, 3.04, -90, { w: 1.8 });
-O('cucina_colonne', 6.2, 1.21, -90, { w: 0.24 });
-O('anta_passaggio', 6.2, 1.735, -90, { w: 0.81 });
-O('isola', 3.7, 2.34, 0);
-O('sgabello', 3.25, 3.4); O('sgabello', 3.8, 3.4); O('sgabello', 4.35, 3.4);
+O('cucina_base', 4.0, 0.79, 0, { w: 5.0, sink: -0.3, m: 'laccato_antracite', m2: 'top_nero' });
+O('cucina_colonne', 6.2, 3.04, -90, { w: 1.8, m: 'laccato_antracite' });
+O('cucina_colonne', 6.2, 1.21, -90, { w: 0.24, m: 'laccato_antracite' });
+O('anta_passaggio', 6.2, 1.735, -90, { w: 0.81, m: 'laccato_antracite' });
+O('isola', 3.7, 2.34, 0, { m: 'legno_rovere', m2: 'top_nero' });
+const SG = { m: 'pelle_marrone' };
+O('sgabello', 3.25, 3.4, 0, SG); O('sgabello', 3.8, 3.4, 0, SG); O('sgabello', 4.35, 3.4, 0, SG);
 // --- pranzo e soggiorno ---
-O('tavolo_pranzo', 3.76, 4.55, 0, { w: 1.6 });
-O('divano2', 2.93, 6.48, 0);
-O('divano3', 4.54, 8.1, -90);
-O('tavolino', 2.98, 7.98, 0);
-O('mobile_tv', 0.74, 8.4, 90, { w: 3.2 });
+O('tavolo_pranzo', 3.76, 4.55, 0, { w: 1.6, m: 'legno_noce' });
+O('divano2', 2.93, 6.48, 0, { m: 'tessuto_antracite' });
+O('divano3', 4.54, 8.1, -90, { m: 'tessuto_blu' });
+O('tavolino', 2.98, 7.98, 0, { m: 'legno_noce' });
+O('mobile_tv', 0.74, 8.4, 90, { w: 3.2, m: 'legno_noce' });
 O('pianta', 6.58, 8.54); O('pianta', 9.3, 8.54);
 // --- studio, disimpegno, bagno, lavanderia, tecnico ---
 O('scrivania', 11.75, 9.24, 0, { w: 1.2 });
 O('sedia_ufficio', 11.75, 8.6, 180);
-O('divano2', 13.72, 9.37, -90);
-O('armadio', 12.19, 7.04, 180, { w: 3.98 });
-O('armadio', 10.99, 5.04, 0, { w: 1.58 });
-O('lavabo', 13.42, 3.48, 0);
+O('divano2', 13.72, 9.37, -90, { m: 'tessuto_verde' });
+O('armadio', 12.19, 7.04, 180, { w: 3.98, m: 'laccato_tortora' });
+O('armadio', 10.99, 5.04, 0, { w: 1.58, m: 'laccato_tortora' });
+O('lavabo', 13.42, 3.48, 0, { m: 'legno_noce' });
 O('wc', 12.17, 4.23, 90); O('bidet', 12.17, 4.85, 90);
-O('cucina_base', 7.7, 3.64, 180, { w: 2.2, m: 'laccato_bianco', sink: 0.5 });
+O('cucina_base', 7.7, 3.64, 180, { w: 2.2, m: 'laccato_tortora', m2: 'top_nero', sink: 0.5 });
 O('lavatrice', 9.08, 1.4, -90); O('lavatrice', 9.08, 2.05, -90);
 O('caldaia', 13.0, 1.52, 0); O('accumulo', 9.95, 1.85, 0);
 // --- piano primo ---
 const P = (t, x, z, r, o) => O(t, x, z, r, o, 'p1');
-P('letto_matr', 3.0, 8.43, -90);
-P('comodino', 3.8, 7.33, -90); P('comodino', 3.8, 9.53, -90);
-P('mobile_tv', 1.62, 6.28, 0, { w: 2.2 });
+P('letto_matr', 3.0, 8.43, -90, { m: 'tessuto_antracite', m2: 'legno_noce' });
+const CM = { m: 'legno_noce' };
+P('comodino', 3.8, 7.33, -90, CM); P('comodino', 3.8, 9.53, -90, CM);
+P('mobile_tv', 1.62, 6.28, 0, { w: 2.2, m: 'legno_noce' });
 P('doccia', 2.16, 3.72, 0, { w: 1.3, d: 0.9 });
-P('lavabo', 0.74, 4.65, 90); P('wc', 2.31, 5.66, 180); P('bidet', 1.75, 5.66, 180);
-P('armadio', 1.8, 1.815, 90, { w: 2.63 }); P('armadio', 4.7, 1.815, -90, { w: 2.63 });
-P('cassettiera', 3.25, 0.75, 0, { w: 2.2 });
-P('scaffale', 4.97, 3.45, 0, { w: 1.6 });
-P('letto_sing', 7.22, 2.9, 180); P('comodino', 6.32, 3.72, 180); P('armadio', 5.41, 1.81, 90, { w: 2.62 });
-P('letto_sing', 11.98, 2.9, 180, { w: 1.2 }); P('comodino', 11.07, 3.72, 180); P('armadio', 13.89, 2.21, -90, { w: 3.43 });
-P('lavabo', 10.89, 5.7, 180); P('doccia', 12.11, 5.44, 0, { w: 0.97, d: 0.95 });
-P('wc', 13.74, 5.66, 180); P('bidet', 13.19, 5.66, 180); P('lavabo', 13.63, 4.28, 0);
-P('letto_sing', 11.32, 8.08, 90, { w: 1.2 }); P('comodino', 10.52, 8.95, 90); P('armadio', 13.89, 7.78, -90, { w: 3.48 });
+P('lavabo', 0.74, 4.65, 90, CM); P('wc', 2.31, 5.66, 180); P('bidet', 1.75, 5.66, 180);
+P('armadio', 1.8, 1.815, 90, { w: 2.63, m: 'laccato_tortora' }); P('armadio', 4.7, 1.815, -90, { w: 2.63, m: 'laccato_tortora' });
+P('cassettiera', 3.25, 0.75, 0, { w: 2.2, m: 'legno_noce' });
+P('scaffale', 4.97, 3.45, 0, { w: 1.6, m: 'laccato_antracite' });
+P('letto_sing', 7.22, 2.9, 180, { m: 'tessuto_blu', m2: 'legno_noce' }); P('comodino', 6.32, 3.72, 180, CM); P('armadio', 5.41, 1.81, 90, { w: 2.62, m: 'laccato_tortora' });
+P('letto_sing', 11.98, 2.9, 180, { w: 1.2, m: 'tessuto_verde', m2: 'legno_noce' }); P('comodino', 11.07, 3.72, 180, CM); P('armadio', 13.89, 2.21, -90, { w: 3.43, m: 'laccato_salvia' });
+P('lavabo', 10.89, 5.7, 180, CM); P('doccia', 12.11, 5.44, 0, { w: 0.97, d: 0.95 });
+P('wc', 13.74, 5.66, 180); P('bidet', 13.19, 5.66, 180); P('lavabo', 13.63, 4.28, 0, CM);
+P('letto_sing', 11.32, 8.08, 90, { w: 1.2, m: 'tessuto_senape', m2: 'legno_noce' }); P('comodino', 10.52, 8.95, 90, CM); P('armadio', 13.89, 7.78, -90, { w: 3.48, m: 'laccato_grigio' });
 
 // ================= LOTTO, RECINZIONE, GIARDINO (coordinate mondo) =================
 const zona = (id, x1, z1, x2, z2, m, layer, o = {}) =>
@@ -298,9 +300,9 @@ OW('recinzione', LR - 0.12, (LB + LF) / 2, 90, { w: LOT.d });
 
 // pergola con salotto e tavolo, lettini
 OW('pergola', X(-2.45), Z(3.35), 0, { w: 4.2, d: 6.4 });
-OW('divano_est_ang', X(-3.05), Z(5.1), 90);
+OW('divano_est_ang', X(-3.05), Z(5.1), 90, { m: 'tessuto_antracite' });
 OW('tavolo_est', X(-2.4), Z(1.75), 0);
-OW('lettino', 6.6, 2.1, 0); OW('lettino', 7.7, 2.1, 0);
+OW('lettino', 6.6, 2.1, 0, { m: 'tessuto_beige' }); OW('lettino', 7.7, 2.1, 0, { m: 'tessuto_beige' });
 // verde e arredo del giardino frontale
 OW('fioriera', X(5.2), Z(13.75), 0, { w: 2.4, cactus: 1 });
 OW('panca', X(5.6), Z(14.75), 0);
