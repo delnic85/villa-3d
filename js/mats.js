@@ -16,6 +16,7 @@ export const LIB = {
   gres_beige: ['Gres beige 60x60', 'pav', '#d5c8b2', 'tiles', { s: 1.2, n: 2 }],
   gres_bianco: ['Gres bianco 60x60', 'pav', '#ebe9e4', 'tiles', { s: 1.2, n: 2 }],
   gres_grande: ['Gres grande 120x120', 'pav', '#b9b7b2', 'tiles', { s: 2.4, n: 2 }],
+  gres_chiaro_100: ['Gres grigio chiaro 100x100', 'pav', '#c9cacb', 'tiles', { s: 2.0, n: 2 }],
   marmo_bianco: ['Marmo bianco', 'pav', '#eeece8', 'marble', { s: 2.4, vein: '#9aa0a6' }],
   marmo_nero: ['Marmo nero', 'pav', '#2a2b2e', 'marble', { s: 2.4, vein: '#c9c2b0' }],
   resina_grigia: ['Resina grigia', 'pav', '#b3b1ac', 'noise', { s: 3, amp: 0.05 }],

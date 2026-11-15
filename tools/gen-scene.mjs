@@ -16,6 +16,8 @@ const Y0 = 0.15, Y1 = 3.45, ROOF = 6.75, H = 3.0;
 const r3 = v => +v.toFixed(3);
 const X = x => r3(x + HX), Z = z => r3(z + HZ);
 
+// pavimenti scelti dall'utente: piano terra tutto in gres grigio chiaro 100x100, piano primo tutto in parquet chiaro
+const FLOOR = { pt: 'gres_chiaro_100', p1: 'parquet_naturale' };
 const walls = [], rooms = [], boxes = [], cyls = [], rails = [], objects = [];
 const cnt = {};
 
@@ -34,7 +36,7 @@ function W(id, lv, x1, z1, x2, z2, o = {}) {
 }
 function R(id, name, lv, rects, o = {}) {
   const c = v => v.map(q => [X(q[0]), Z(q[1]), X(q[2]), Z(q[3])]);
-  const r = { id, name, lv, rects: c(rects), floor: o.floor || 'parquet_rovere' };
+  const r = { id, name, lv, rects: c(rects), floor: o.floor || FLOOR[lv] };
   if (o.walls) r.walls = o.walls;
   if (o.ch) r.ch = o.ch;
   if (o.crects) r.crects = c(o.crects);
@@ -95,9 +97,9 @@ R('cucina', 'Cucina', 'pt', [[1.5, 0.49, 6.5, 3.64], [5.9, 3.64, 6.5, 3.94]]);
 R('soggiorno', 'Soggiorno e pranzo', 'pt', [[0.5, 3.64, 5.9, 7.73], [5.9, 4.04, 10.09, 7.73], [0.5, 7.73, 4.15, 10.03]],
   { crects: [[0.5, 3.64, 5.9, 7.73], [0.5, 7.73, 4.15, 10.03], [5.9, 6.51, 10.09, 7.73], [7.61, 5.13, 10.09, 6.51], [8.99, 4.04, 10.09, 5.13]] });  // soffitto forato dal vano scala
 R('ingresso', 'Ingresso a doppia altezza', 'pt', [[4.15, 7.73, 10.09, 10.03]], { ch: 6.3, crects: [[4.15, 7.73, 10.19, 10.03]] });
-R('lavanderia', 'Lavanderia', 'pt', [[6.6, 0.49, 9.39, 3.94]], { floor: 'gres_grigio' });
-R('tecnico', 'Locale tecnico', 'pt', [[9.49, 1.34, 14.19, 3.14], [9.49, 3.14, 11.79, 3.94], [10.19, 3.94, 11.79, 4.64]], { floor: 'gres_grigio' });
-R('bagno_pt', 'Bagno piano terra', 'pt', [[11.89, 3.24, 14.19, 5.24]], { floor: 'gres_grigio', walls: 'riv_bianco' });
+R('lavanderia', 'Lavanderia', 'pt', [[6.6, 0.49, 9.39, 3.94]]);
+R('tecnico', 'Locale tecnico', 'pt', [[9.49, 1.34, 14.19, 3.14], [9.49, 3.14, 11.79, 3.94], [10.19, 3.94, 11.79, 4.64]]);
+R('bagno_pt', 'Bagno piano terra', 'pt', [[11.89, 3.24, 14.19, 5.24]], { walls: 'riv_bianco' });
 R('corridoio', 'Disimpegno', 'pt', [[10.09, 5.34, 14.19, 7.34], [10.19, 4.74, 11.79, 5.34]]);
 R('studio', 'Studio', 'pt', [[10.19, 7.44, 14.19, 11.04]]);
 
@@ -131,13 +133,13 @@ W('p_bath2_div', 'p1', 11.49, 4.04, 11.59, 5.94, { op: [open(4.14, 4.94)] });
 W('p_nicS', 'p1', 9.09, 7.64, 10.19, 7.73);
 
 R('cabina', 'Cabina armadio', 'p1', [[1.5, 0.49, 5.0, 3.14]]);
-R('bagno_m', 'Bagno padronale', 'p1', [[0.5, 3.64, 2.85, 5.94], [1.5, 3.24, 2.85, 3.64]], { floor: 'gres_grigio', walls: 'riv_bianco' });
+R('bagno_m', 'Bagno padronale', 'p1', [[0.5, 3.64, 2.85, 5.94], [1.5, 3.24, 2.85, 3.64]], { walls: 'riv_bianco' });
 R('camera_m', 'Camera matrimoniale', 'p1', [[0.5, 6.04, 4.05, 10.03], [2.95, 3.24, 4.05, 6.04]]);
 R('ripostiglio', 'Ripostiglio', 'p1', [[4.15, 3.24, 5.8, 4.94]]);
 R('camera2', 'Camera 2', 'p1', [[5.11, 0.49, 8.99, 3.14], [5.9, 3.14, 8.99, 3.94]]);
 R('nicchia', 'Ripostiglio corridoio', 'p1', [[9.09, 0.49, 10.19, 1.94]]);
 R('camera3', 'Camera 3', 'p1', [[10.29, 0.49, 14.19, 3.94]]);
-R('bagno2', 'Bagno piano primo', 'p1', [[10.29, 4.04, 14.19, 5.94]], { floor: 'gres_grigio', walls: 'riv_bianco' });
+R('bagno2', 'Bagno piano primo', 'p1', [[10.29, 4.04, 14.19, 5.94]], { walls: 'riv_bianco' });
 R('camera4', 'Camera 4', 'p1', [[10.29, 6.04, 14.19, 9.53]]);
 const BAL = [[4.15, 5.04, 5.9, 7.73], [5.9, 6.51, 8.99, 7.73], [7.61, 5.13, 8.99, 6.51], [9.09, 2.04, 10.19, 7.64], [8.99, 6.14, 9.09, 6.99]];
 R('ballatoio', 'Ballatoio e corridoio', 'p1', BAL, { crects: BAL.concat([[5.9, 4.04, 8.99, 5.13], [5.9, 5.13, 7.61, 6.51]]) });
