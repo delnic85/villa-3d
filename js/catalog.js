@@ -76,6 +76,28 @@ def('lampada_terra', 'Lampada da terra', 'sogg', { m: 'metallo_nero', mg: 'met',
 def('quadro', 'Quadro a parete', 'sogg', { m: 'tessuto_blu', mg: 'tess', n1: 'Colore', w: [1.2, 0.4, 2.4, 0.2] }, (B, o, m, m2, w) => {
   B.bx(0, 1.25, 0, w, 0.8, 0.03, 'metallo_nero'); B.bx(0, 1.29, 0.012, w - 0.08, 0.72, 0.012, m); B.bx(-w * 0.15, 1.45, 0.02, w * 0.3, 0.3, 0.004, 'tessuto_senape');
 });
+// pianoforte verticale (senza coda) con panchetta: largo 1,50 m, alto 1,25 m, profondo 60 cm; schiena verso -z
+def('pianoforte', 'Pianoforte verticale', 'sogg', { m: 'laccato_nero', mg: 'legni', n1: 'Finitura', m2: 'pelle_marrone', m2g: 'tess', n2: 'Seduta panchetta' }, (B, o, m, m2) => {
+  const W = 1.5;
+  B.bx(0, 0, -0.14, W, 1.22, 0.32, m);                       // cassa
+  B.bx(0, 1.22, -0.14, W + 0.04, 0.03, 0.36, m);             // coperchio
+  B.bx(0, 0.62, 0.155, W, 0.115, 0.29, m);                   // mensola della tastiera
+  for (const s of [-1, 1]) {
+    B.bx(s * (W / 2 - 0.035), 0.735, 0.155, 0.07, 0.06, 0.29, m);   // fianchetti
+    B.bx(s * (W / 2 - 0.045), 0, 0.24, 0.07, 0.62, 0.07, m);        // gambe anteriori
+  }
+  B.bx(0, 0, 0.05, W - 0.2, 0.1, 0.08, m);                   // zoccolo
+  B.bx(0, 0.86, 0.035, 0.78, 0.02, 0.05, m);                 // leggio
+  // tastiera: 52 tasti bianchi e 36 neri
+  const kw = 1.22 / 52, x0 = -0.61;
+  B.bx(0, 0.735, 0.165, 1.22, 0.012, 0.15, 'ceramica');
+  for (let i = 0; i < 51; i++) { const k = i % 7; if (k === 1 || k === 4) continue; B.bx(x0 + (i + 1) * kw, 0.747, 0.135, 0.013, 0.01, 0.09, 'metallo_nero'); }
+  for (const x of [-0.1, 0, 0.1]) B.bx(x, 0.02, 0.13, 0.03, 0.012, 0.09, 'ottone');   // pedali
+  // panchetta
+  B.bx(0, 0.4, 0.72, 0.78, 0.08, 0.34, m2);
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) B.bx(sx * 0.34, 0, 0.72 + sz * 0.12, 0.045, 0.4, 0.045, m);
+});
+
 // ---------------- cucina e pranzo ----------------
 def('tavolo_pranzo', 'Tavolo da pranzo con sedie', 'cuc', { ...LG, m2: 'metallo_nero', n2: 'Gambe', w: [1.6, 0.8, 3.2, 0.2], d: [0.8, 0.7, 1.2, 0.1] }, (B, o, m, m2, w, d) => tavolo(B, w, d, m, m2, 'tessuto_antracite', m2));
 def('sedia', 'Sedia', 'cuc', { m: 'tessuto_antracite', mg: 'tess', n1: 'Seduta', m2: 'metallo_nero' }, (B, o, m, m2) => sedia(B, 0, 0, 0, m, m2));
