@@ -4,6 +4,7 @@
 // Uso: node tools/gen-scene.mjs
 import fs from 'fs';
 
+const APP = '6';   // versione del codice dell'app richiesta da questa scena: la imposta tools/versiona.mjs
 const REV = process.argv[2] || new Date().toISOString().slice(0, 16).replace('T', ' ');
 // Lotto 710 mq: lati ricavati dalla mappa catastale (rettangolo equivalente 31,4 x 22,6 m, lato lungo sulla strada).
 // La casa resta ferma nelle coordinate mondo (HX, HZ): a spostarsi e' l'origine del lotto (x0, z0),
@@ -333,7 +334,7 @@ const views = [
 ];
 
 const scene = {
-  rev: REV, title: 'Villa 3D', lot: LOT, house: [HX, HZ],
+  rev: REV, app: APP, title: 'Villa 3D', lot: LOT, house: [HX, HZ],
   levels: { pt: { y: Y0, h: H, n: 'Piano terra' }, p1: { y: Y1, h: H, n: 'Piano primo' } },
   floorViews: { pt: 2, p1: 6 },
   rooms, walls, boxes, cyls, rails, attic, stairs, objects, views

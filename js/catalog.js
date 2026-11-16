@@ -1,7 +1,7 @@
 // Catalogo degli oggetti (arredi interni, esterni, verde, recinzioni, pavimentazioni).
 // Convenzione: origine a terra, fronte dell'oggetto verso +z, schiena verso -z.
-import { Builder, WALK } from './builder.js';
-import { getMat } from './mats.js';
+import { Builder, WALK } from './builder.js?v=6';
+import { getMat } from './mats.js?v=6';
 
 export const CATS = {
   sogg: 'Soggiorno', cuc: 'Cucina e pranzo', notte: 'Camere e studio', bagno: 'Bagno e servizi',

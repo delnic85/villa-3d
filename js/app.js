@@ -1,10 +1,11 @@
 // Villa 3D — tour virtuale modificabile (three.js + WebXR, pensato per Meta Quest 3).
 import * as THREE from 'three';
-import { WALK, NOPICK } from './builder.js';
-import { getMat, GROUPS, groupList, matName, matGroup, drawSwatch, setNight } from './mats.js';
-import { buildStructure } from './house.js';
-import { CAT, CATS, resolveObjects, buildObjects, buildLive } from './catalog.js';
+import { WALK, NOPICK } from './builder.js?v=6';
+import { getMat, GROUPS, groupList, matName, matGroup, drawSwatch, setNight } from './mats.js?v=6';
+import { buildStructure } from './house.js?v=6';
+import { CAT, CATS, resolveObjects, buildObjects, buildLive } from './catalog.js?v=6';
 
+const APPV = '6';   // versione del codice dell'app: la imposta tools/versiona.mjs insieme agli indirizzi dei moduli
 const LS = 'villa3d.user.v1', DEG = Math.PI / 180, UP = new THREE.Vector3(0, 1, 0), DOWN = new THREE.Vector3(0, -1, 0);
 const $ = id => document.getElementById(id);
 const Q = new URLSearchParams(location.search);
@@ -90,6 +91,7 @@ function rebuildObjects() {
 }
 function rebuildAll() { rebuildStructure(); rebuildObjects(); updateHL(); }
 
+let newApp = false;
 async function loadScene(first) {
   try {
     let r = await fetch('scene.json?t=' + Date.now(), { cache: 'no-store' }).catch(() => null);
@@ -98,10 +100,16 @@ async function loadScene(first) {
     const t = await r.text();
     if (t === sceneText) return;
     const ns = JSON.parse(t);
+    // se la scena pubblicata e' fatta per una versione piu' nuova dell'app, questa pagina sta usando file vecchi (cache):
+    // all'avvio si ricarica da sola su un indirizzo nuovo; a tour gia' avviato avvisa soltanto, per non far uscire dalla VR
+    if (ns.app && ns.app !== APPV) {
+      if (first && Q.get('v') !== ns.app) { const u = new URL(location.href); u.searchParams.set('v', ns.app); location.replace(u); return; }
+      newApp = true;
+    }
     sceneText = t; S = ns;
     if (move) endMove(false);
     rebuildAll();
-    if (!first) { toast('Scena aggiornata (' + S.rev + ')'); ui.draw(); }
+    if (!first) { toast(newApp ? 'Tour aggiornato: ricarica la pagina per avere le novità' : 'Scena aggiornata (' + S.rev + ')', newApp ? 8000 : 3200); ui.draw(); }
   } catch (e) { if (first) { $('err').textContent = 'Errore nel caricamento della scena: ' + e.message; $('err').style.display = 'block'; } }
 }
 
@@ -360,7 +368,7 @@ const SCREENS = {
     txt('Comandi nel visore', 28, y, 26, C.tx, 'left', 700); y += 40;
     for (const l of ['Levetta sinistra: cammini', 'Levetta destra: ruoti a scatti', 'Grilletto: teletrasporto, oppure selezione con il menu aperto', 'A / X: apre e chiude questo menu', 'B / Y: cambia piano'])
       y = para('• ' + l, 28, y, 664, 23, C.dim, 1.35) + 4;
-    txt('Scena ' + S.rev + '  ·  le modifiche restano salvate su questo dispositivo', 28, ui.H - 30, 19, C.dim, 'left', 400, 664);
+    txt('Scena ' + S.rev + '  ·  app ' + APPV + '  ·  le modifiche restano salvate su questo dispositivo', 28, ui.H - 30, 19, C.dim, 'left', 400, 664);
   },
   surf() {
     const e = entByKey(sel.key); if (!e) return SCREENS.home();
