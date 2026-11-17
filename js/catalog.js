@@ -1,7 +1,7 @@
 // Catalogo degli oggetti (arredi interni, esterni, verde, recinzioni, pavimentazioni).
 // Convenzione: origine a terra, fronte dell'oggetto verso +z, schiena verso -z.
-import { Builder, WALK } from './builder.js?v=6';
-import { getMat } from './mats.js?v=6';
+import { Builder, WALK } from './builder.js?v=7';
+import { getMat } from './mats.js?v=7';
 
 export const CATS = {
   sogg: 'Soggiorno', cuc: 'Cucina e pranzo', notte: 'Camere e studio', bagno: 'Bagno e servizi',
@@ -138,6 +138,21 @@ def('scrivania', 'Scrivania', 'notte', { ...LG, m2: 'metallo_nero', n2: 'Gambe',
 });
 def('sedia_ufficio', 'Sedia da ufficio', 'notte', { m: 'tessuto_antracite', mg: 'tess', n1: 'Seduta' }, (B, o, m) => {
   B.cyl(0, 0, 0, 0.28, 0.04, 'metallo_nero', 10); B.cyl(0, 0.04, 0, 0.03, 0.4, 'metallo_nero', 6); B.bx(0, 0.44, 0, 0.48, 0.07, 0.46, m); B.bx(0, 0.55, -0.22, 0.44, 0.5, 0.05, m);
+});
+// toilette da trucco: piano con cassetti, specchio da tavolo, beauty case e pouf; schiena verso -z
+def('toilette', 'Toilette da trucco con pouf', 'notte', { m: 'legno_noce', mg: 'legni', n1: 'Finitura', m2: 'tessuto_senape', m2g: 'tess', n2: 'Pouf', w: [1.2, 0.8, 2.0, 0.1] }, (B, o, m, m2, w) => {
+  B.bx(0, 0.72, 0, w, 0.04, 0.45, m);                        // piano (76 cm da terra)
+  B.bx(0, 0.6, 0, w - 0.04, 0.12, 0.43, m);                  // fascia dei cassetti
+  for (const k of [-1, 0, 1]) { if (k) B.bx(k * w / 6, 0.61, 0.216, 0.006, 0.1, 0.004, 'metallo_nero'); B.bx(k * w / 3, 0.655, 0.218, 0.1, 0.012, 0.008, 'ottone'); }
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) B.bx(sx * (w / 2 - 0.05), 0, sz * 0.18, 0.03, 0.6, 0.03, 'metallo_nero');
+  // specchio da tavolo con cornice
+  B.bx(0, 0.76, -0.16, 0.22, 0.02, 0.1, 'ottone');
+  B.bx(0, 0.78, -0.17, 0.46, 0.5, 0.012, 'ottone'); B.bx(0, 0.795, -0.162, 0.42, 0.47, 0.006, 'specchio');
+  // beauty case e flaconi
+  B.bx(-w / 2 + 0.2, 0.76, -0.02, 0.22, 0.09, 0.15, 'pelle_marrone'); B.bx(-w / 2 + 0.2, 0.85, -0.02, 0.1, 0.012, 0.02, 'ottone');
+  B.cyl(w / 2 - 0.16, 0.76, -0.06, 0.03, 0.1, 'tessuto_bordeaux', 8); B.cyl(w / 2 - 0.25, 0.76, 0.02, 0.025, 0.06, 'ottone', 8); B.cyl(w / 2 - 0.12, 0.76, 0.05, 0.02, 0.07, 'tessuto_blu', 8);
+  // pouf
+  B.cyl(0, 0, 0.55, 0.17, 0.04, 'metallo_nero', 12); B.cyl(0, 0.04, 0.55, 0.2, 0.4, m2, 14);
 });
 def('scaffale', 'Scaffale', 'notte', { ...LB, w: [1.6, 0.6, 3, 0.2] }, (B, o, m, m2, w) => {
   for (const s of [-1, 1]) B.bx(s * (w / 2 - 0.015), 0, 0, 0.03, 2.0, 0.4, m);

@@ -1,7 +1,7 @@
 // Costruisce la struttura della villa dal file di scena: stanze, muri con aperture, infissi,
 // solai, balconi, parapetti, attico e scala. Ogni superficie ha una "entità" per poterla selezionare.
-import { Builder, WALK, NOPICK } from './builder.js?v=6';
-import { getMat } from './mats.js?v=6';
+import { Builder, WALK, NOPICK } from './builder.js?v=7';
+import { getMat } from './mats.js?v=7';
 
 export function buildStructure(S, U) {
   const B = new Builder();

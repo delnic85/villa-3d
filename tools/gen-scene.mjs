@@ -4,7 +4,7 @@
 // Uso: node tools/gen-scene.mjs
 import fs from 'fs';
 
-const APP = '6';   // versione del codice dell'app richiesta da questa scena: la imposta tools/versiona.mjs
+const APP = '7';   // versione del codice dell'app richiesta da questa scena: la imposta tools/versiona.mjs
 const REV = process.argv[2] || new Date().toISOString().slice(0, 16).replace('T', ' ');
 // Lotto 710 mq: lati ricavati dalla mappa catastale (rettangolo equivalente 31,4 x 22,6 m, lato lungo sulla strada).
 // La casa resta ferma nelle coordinate mondo (HX, HZ): a spostarsi e' l'origine del lotto (x0, z0),
@@ -265,7 +265,8 @@ P('mobile_tv', 1.62, 6.28, 0, { w: 2.2, m: 'legno_noce' });
 P('doccia', 2.16, 3.72, 0, { w: 1.3, d: 0.9 });
 P('lavabo', 0.74, 4.65, 90, CM); P('wc', 2.31, 5.66, 180); P('bidet', 1.75, 5.66, 180);
 P('armadio', 1.8, 1.815, 90, { w: 2.63, m: 'laccato_tortora' }); P('armadio', 4.7, 1.815, -90, { w: 2.63, m: 'laccato_tortora' });
-P('cassettiera', 3.25, 0.75, 0, { w: 2.2, m: 'legno_noce' });
+// sotto la finestra della cabina armadio (asse finestra x = 3,25): toilette da trucco al posto della cassettiera (richiesta dell'utente)
+P('toilette', 3.25, 0.725, 0, { w: 1.2 });
 P('scaffale', 4.97, 3.45, 0, { w: 1.6, m: 'laccato_antracite' });
 P('letto_sing', 7.22, 2.9, 180, { m: 'tessuto_blu', m2: 'legno_noce' }); P('comodino', 6.32, 3.72, 180, CM); P('armadio', 5.41, 1.81, 90, { w: 2.62, m: 'laccato_tortora' });
 P('letto_sing', 11.98, 2.9, 180, { w: 1.2, m: 'tessuto_verde', m2: 'legno_noce' }); P('comodino', 11.07, 3.72, 180, CM); P('armadio', 13.89, 2.21, -90, { w: 3.43, m: 'laccato_salvia' });

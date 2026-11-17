@@ -1,11 +1,11 @@
 // Villa 3D — tour virtuale modificabile (three.js + WebXR, pensato per Meta Quest 3).
 import * as THREE from 'three';
-import { WALK, NOPICK } from './builder.js?v=6';
-import { getMat, GROUPS, groupList, matName, matGroup, drawSwatch, setNight } from './mats.js?v=6';
-import { buildStructure } from './house.js?v=6';
-import { CAT, CATS, resolveObjects, buildObjects, buildLive } from './catalog.js?v=6';
+import { WALK, NOPICK } from './builder.js?v=7';
+import { getMat, GROUPS, groupList, matName, matGroup, drawSwatch, setNight } from './mats.js?v=7';
+import { buildStructure } from './house.js?v=7';
+import { CAT, CATS, resolveObjects, buildObjects, buildLive } from './catalog.js?v=7';
 
-const APPV = '6';   // versione del codice dell'app: la imposta tools/versiona.mjs insieme agli indirizzi dei moduli
+const APPV = '7';   // versione del codice dell'app: la imposta tools/versiona.mjs insieme agli indirizzi dei moduli
 const LS = 'villa3d.user.v1', DEG = Math.PI / 180, UP = new THREE.Vector3(0, 1, 0), DOWN = new THREE.Vector3(0, -1, 0);
 const $ = id => document.getElementById(id);
 const Q = new URLSearchParams(location.search);
