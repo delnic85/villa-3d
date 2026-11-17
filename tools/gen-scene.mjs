@@ -265,14 +265,17 @@ P('mobile_tv', 1.62, 6.28, 0, { w: 2.2, m: 'legno_noce' });
 P('doccia', 2.16, 3.72, 0, { w: 1.3, d: 0.9 });
 P('lavabo', 0.74, 4.65, 90, CM); P('wc', 2.31, 5.66, 180); P('bidet', 1.75, 5.66, 180);
 P('armadio', 1.8, 1.815, 90, { w: 2.63, m: 'laccato_tortora' }); P('armadio', 4.7, 1.815, -90, { w: 2.63, m: 'laccato_tortora' });
-// sotto la finestra della cabina armadio (asse finestra x = 3,25): toilette da trucco al posto della cassettiera (richiesta dell'utente)
-P('toilette', 3.25, 0.725, 0, { w: 1.2 });
+// cabina armadio come da pianta: armadi a L sui due lati (i ritorni sulla parete di fondo sono aggiunti piu' sotto, in coda agli armadi)
+// e, nel vano di 80 cm sotto la finestra (x da 2,85 a 3,65), la toilette da trucco al posto della cassettiera
+P('toilette', 3.25, 0.725, 0, { w: 0.8 });
 P('scaffale', 4.97, 3.45, 0, { w: 1.6, m: 'laccato_antracite' });
 P('letto_sing', 7.22, 2.9, 180, { m: 'tessuto_blu', m2: 'legno_noce' }); P('comodino', 6.32, 3.72, 180, CM); P('armadio', 5.41, 1.81, 90, { w: 2.62, m: 'laccato_tortora' });
 P('letto_sing', 11.98, 2.9, 180, { w: 1.2, m: 'tessuto_verde', m2: 'legno_noce' }); P('comodino', 11.07, 3.72, 180, CM); P('armadio', 13.89, 2.21, -90, { w: 3.43, m: 'laccato_salvia' });
 P('lavabo', 10.89, 5.7, 180, CM); P('doccia', 12.11, 5.44, 0, { w: 0.97, d: 0.95 });
 P('wc', 13.74, 5.66, 180); P('bidet', 13.19, 5.66, 180); P('lavabo', 13.63, 4.28, 0, CM);
 P('letto_sing', 11.32, 8.08, 90, { w: 1.2, m: 'tessuto_senape', m2: 'legno_noce' }); P('comodino', 10.52, 8.95, 90, CM); P('armadio', 13.89, 7.78, -90, { w: 3.48, m: 'laccato_grigio' });
+// ritorni a L degli armadi della cabina, sulla parete di fondo, dal fronte dell'armadio laterale al filo della finestra
+P('armadio', 2.475, 0.795, 0, { w: 0.75, m: 'laccato_tortora' }); P('armadio', 4.025, 0.795, 0, { w: 0.75, m: 'laccato_tortora' });
 
 // ================= LOTTO, RECINZIONE, GIARDINO (coordinate mondo) =================
 const zona = (id, x1, z1, x2, z2, m, layer, o = {}) =>
